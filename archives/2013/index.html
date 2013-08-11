@@ -68,105 +68,16 @@
     <div class="entry">
       
         <p>刚开始学习R时候遵循很多人的建议，用《R in Action》作为入门教程，出现了这样一个现象：书上的例子能懂，能学会；一旦用R处理实际数据，立刻手足无措。数据如何导入，如何从多个数据源对比筛选出需要的数据（R支持SQL语句，如果不想深入学习R的话，沿用SQL的语言习惯也是一种办法），如何把数据框中的factor类型变成character类型，等等。这些细节问题对于初学者往往是致命的障碍。一路磕磕碰碰好不容易把数据调整成想要的格式，调用书上学来的命令反而是整个过程中最简单的一步。</p>
-<p>这个时候需要反思一下，《R in Action》真的是一本合适的入门教材吗？</p>
-<p>我的答案是，对有些人是，对有些人不是。《R in Action》这本书的最大优点在于把R与统计学结合得很紧密，讲得比较透彻。但是作为有一定统计学基础，尤其是已经使用过其他统计软件（如Minitab）的人来说，这部分内容反而无足轻重。只要概念了然于胸，具体的函数调用方式查查书和文档就好，不是难点。</p>
-<p>相比之下，我更推荐用《The Art of R Programming》来入门。这本书按照学习语言的一般流程，从数据结构、控制语句等方面讲起，重点是教会你如何写出正确高效的R程序，如何学会用R的思考方式来编程。这对R的初学者是非常重要的。不学会用向量的思维来处理数据，就只能一直忍受R低效的循环语句；不学会灵活利用自动补齐的规则，就只能自己制造一些奇怪的向量。</p>
-<p>编程能力是使用R的基础。熟练掌握R编程，就像学会了小无相功，到那时，想做统计分析也好，想做数据挖掘也好，少林七十二绝技还不都是手到擒来？</p>
-<p>因此，我首先要完成的就是和R编程有关的几篇学习笔记。</p>
-<h1>基础入门篇</h1>
-<h2>执行其他文件中的代码</h2>
-<p>如果有后缀<code>.R</code>的代码文件，可以用以下命令<strong>执行</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="blockquote">&gt; source("filename.R")</span>
-</pre></td></tr></table></figure>
-
-<h3>向量的生成与合并</h3>
-<p>生成向量的代码如下</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&gt; x <span class="tag">&lt;<span class="title">-</span> <span class="attribute">c</span>(<span class="attribute">1</span>, <span class="attribute">2</span>, <span class="attribute">4</span>)
-</pre></td></tr></table></figure>
-
-<p>其中c表示<strong>连接（concatenate）</strong>。已有的向量也可以用于连接，如</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&gt; y <span class="tag">&lt;<span class="title">-</span> <span class="attribute">c</span>(<span class="attribute">x</span>, <span class="attribute">x</span>, <span class="attribute">5</span>)
-</pre></td></tr></table></figure>
-
-<p>实际上，单个数字也被视为向量。</p>
-<h3>函数定义</h3>
-<p>定义函数的代码与JavaScript类似</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>&gt; <span class="comment">func_name</span> &lt;<span class="literal">-</span> <span class="comment">function(x)</span> <span class="comment">{</span>
-<span class="literal">+</span> <span class="comment">	return(x)</span>
-<span class="literal">+</span> <span class="comment">}
-</pre></td></tr></table></figure>
-
-<p>参数可以指定默认值，如<code>function(x=2){}</code>，如果没有传<code>x</code>参数，则取默认值。</p>
-<h3>变量作用域</h3>
-<ul>
-<li>函数参数都是传值调用，不会改变实参的值</li>
-<li>函数内部定义的变量会在函数运行完后消失，不会出现在工作空间里</li>
-<li>函数里面可以使用外部定义的变量</li>
-<li>在函数内部给全局变量赋值用<code>&lt;&lt;-</code></li>
-</ul>
-<h3>矩阵</h3>
-<p>生成矩阵时可以用<code>rbind()</code>或<code>cbind()</code>，前者会把参数的每一个向量作为一行，后者会把参数的每一个向量作为一列。</p>
-<p>矩阵乘法的运算符是<code>%*%</code>。</p>
-<h3>列表</h3>
-<p>列表里面可以存各种不同的数据类型，常用于函数中把多个结果打包返回。实际上图形函数的返回值就是列表格式（如<code>hist()</code>）。</p>
-<p>调用的列表的成员要用符号<code>$</code>。</p>
-<p>打印列表可以直接用它的变量名：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="blockquote">&gt; listname</span>
-</pre></td></tr></table></figure>
-
-<p>也可以用<code>str()</code>函数得到更简洁美观的结果：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&gt; <span class="keyword">str</span>(listname)
-</pre></td></tr></table></figure>
-
-<p>这里的<strong>str</strong>代表<strong>结构（structure）</strong>，可以用来显示任何R对象的内部结构。</p>
-<h3>数据框</h3>
-<p>每一列相当于一个向量。向量内部数据类型必须相同，向量之间不必相同。数据库可以由向量来创建，也可以由list来创建。</p>
-<h3>类</h3>
-<p>类实际上就是list，多了一个<strong>属性（attribute）</strong>。泛型函数需要通过类名来确定如何处理这个list。</p>
-<h3>查阅文档</h3>
-<p><code>help()</code>函数可以查阅帮助文档，如</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="blockquote">&gt; help(plot)</span>
-</pre></td></tr></table></figure>
-
-<p>也可以简写成<code>?</code>，如</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&gt; <span class="number">?p</span>lot
-</pre></td></tr></table></figure>
-
-<p>有时候要用引号把后面的内容括起来。</p>
-<h3>查看例子</h3>
-<p><code>example()</code>函数可以查看一些指令的用法，如</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="blockquote">&gt; example(persp)</span>
-</pre></td></tr></table></figure>
-
-<h3>搜索文档</h3>
-<p>如果只知道想要的功能，不知道具体的函数名，可以在文档中搜索。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="blockquote">&gt; help.search("multivariate normal")</span>
-</pre></td></tr></table></figure>
-
-<h3>其他帮助资源</h3>
-<ul>
-<li>R语言主页上有多种R语言的搜索引擎</li>
-<li>R包<code>sos</code>能对R语言的材料进行精密搜索</li>
-<li>RSeek搜索引擎<a href="http://www.rseek.org">http://www.rseek.org</a></li>
-<li>在R的邮件列表服务器上发信提问<a href="http://www.r-project.org/mail.html">http://www.r-project.org/mail.html</a></li>
-</ul>
+<p>这个时候需要反思一下，《R in Action》真的是一本合适的入门教材吗？
 
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2013/08/10/r-programming-1/#more" class="more-link">阅读全文</a>
+          </div>
         
         
       
